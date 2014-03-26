@@ -1,0 +1,17 @@
+{
+  "name": "profiler",
+  "author": {
+    "name": "Diego Borges",
+    "email": "drborges.cic@gmail.com"
+  },
+  "private": true,
+  "engines": {
+    "node": ">= 0.9"
+  },
+  "devDependencies": {
+    "gulp-shell": "~0.2.4",
+    "gulp": "~3.5.5",
+    "gulp-plumber": "~0.5.6",
+    "gulp-watch": "~0.5.2"
+  }
+}
