@@ -53,18 +53,16 @@ def test_stop_should_record_profiling_elapsed_time(mocked_datetime):
 def test_should_not_stop_profiling_before_starting_it():
   Profiler().stop('id')
 
-@patch('profiler.datetime')
-def test_creates_checkpoints_for_profile(mocked_datetime):
-  mocked_datetime.now = Mock(side_effect = [2, 10, 12, 15])
+def test_creates_checkpoints_for_profile():
+  profiler = Profiler().start('id1').start('id2')
+  profiler.profiles['id1'].checkpoint = Mock()
+  profiler.profiles['id2'].checkpoint = Mock()
 
-  profiler = Profiler().start('id')
-  profiler.checkpoint('id')
-  profiler.checkpoint('id')
+  profiler.checkpoint('id1')
+  profiler.checkpoint('id2')
 
-  expect([c.__dict__ for c in profiler.profiles['id'].checkpoints]).to.equal([
-    Checkpoint(time=10, elapsed_time=8).__dict__,
-    Checkpoint(time=12, elapsed_time=10).__dict__
-  ])
+  profiler.profiles['id1'].checkpoint.assert_called_once_with()
+  profiler.profiles['id2'].checkpoint.assert_called_once_with()
 
 @raises(InvalidProfileError)
 def test_profiler_should_not_create_checkpoint_before_starting_profiling():
