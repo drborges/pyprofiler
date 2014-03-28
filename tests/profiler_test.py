@@ -27,7 +27,7 @@ def test_start_should_record_profiling_start_time(mocked_datetime):
 
   profiler = Profiler().start('id')
 
-  expect(profiler.profiles['id']['started']).to.equal(2)
+  expect(profiler.profiles['id'].started_at).to.equal(2)
 
 def test_stop_should_return_profiler_instance():
   profiler = Profiler()
@@ -39,7 +39,7 @@ def test_stop_should_record_profiling_stop_time(mocked_datetime):
 
   profiler = Profiler().start('id').stop('id')
 
-  expect(profiler.profiles['id']['stopped']).to.equal(10)
+  expect(profiler.profiles['id'].stopped_at).to.equal(10)
 
 @patch('profiler.datetime')
 def test_stop_should_record_profiling_elapsed_time(mocked_datetime):
@@ -47,7 +47,7 @@ def test_stop_should_record_profiling_elapsed_time(mocked_datetime):
 
   profiler = Profiler().start('id').stop('id')
 
-  expect(profiler.profiles['id']['elapsed']).to.equal(8)
+  expect(profiler.profiles['id'].elapsed_time).to.equal(8)
 
 @raises(InvalidProfileError)
 def test_should_not_stop_profiling_before_starting_it():
@@ -59,7 +59,7 @@ def test_creates_checkpoints_for_profile(mocked_datetime):
 
   profiler = Profiler().start('id').checkpoint('id').checkpoint('id')
 
-  expect(profiler.profiles['id']['checkpoints']).to.equal([
+  expect(profiler.profiles['id'].checkpoints).to.equal([
     { 'time': 10, 'elapsed': 8 },
     { 'time': 12, 'elapsed': 10 }
   ])

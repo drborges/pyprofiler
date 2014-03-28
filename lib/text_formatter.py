@@ -10,7 +10,7 @@ class TextFormatter:
 
     return "\n".join(["%s took %s [started at: %s, finished at: %s]" % (
         profile_id,
-        profile['elapsed'],
-        format_time(profile['started']),
-        format_time(profile['stopped'])
+        profile.elapsed_time,
+        format_time(profile.started_at),
+        format_time(profile.stopped_at)
     ) for profile_id, profile in profiles.items()])

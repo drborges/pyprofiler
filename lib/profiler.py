@@ -1,32 +1,24 @@
 from datetime import datetime
 
+class Checkpoint(object):
+
+  def __init__(self, time, elapsed_time):
+    self.time = time
+    self.elapsed_time = elapsed_time
+
 class Profile:
 
-  def __init__(self, id):
+  def __init__(self, id, started_at = None, stopped_at = None, elapsed_time = None):
     self._id = id
-    self._checkpoints = []
+    self.started_at = started_at
+    self.stopped_at = stopped_at
+    self.elapsed_time = elapsed_time
+    self.checkpoints = []
 
   def checkpoint(self):
     current_time = datetime.now()
-    self._checkpoints.append({
-      'time': current_time,
-      'elapsed': current_time - self.started_at
-    })
-
-  @property
-  def started_at(self, value):
-    self._started_at = value
-    return self
-
-  @property
-  def stopped_at(self, value):
-    self._stopped_at = value
-    return self
-
-  @property
-  def elapsed_time(self, value):
-    self._elapsed_time = value
-    return self
+    elapsed_time = current_time - self.started_at
+    self.checkpoints.append(Checkpoint(current_time, elapsed_time))
 
 class Profiler:
 
@@ -34,7 +26,10 @@ class Profiler:
     self.profiles = {}
 
   def start(self, profile_id):
-    self.profiles[profile_id] = { 'started': datetime.now() }
+    profile = Profile(profile_id)
+    profile.started_at = datetime.now()
+    self.profiles[profile_id] = profile
+
     return self
 
   def stop(self, profile_id):
@@ -42,8 +37,8 @@ class Profiler:
       raise InvalidProfileError(profile_id)
 
     profile = self.profiles[profile_id]
-    profile['stopped'] = datetime.now()
-    profile['elapsed'] = profile['stopped'] - profile['started']
+    profile.stopped_at = datetime.now()
+    profile.elapsed_time = profile.stopped_at - profile.started_at
     return self
 
   def checkpoint(self, profile_id):
@@ -53,12 +48,10 @@ class Profiler:
     current_time = datetime.now()
 
     profile = self.profiles[profile_id]
-    if 'checkpoints' not in profile:
-      profile['checkpoints'] = []
 
-    profile['checkpoints'].append({
+    profile.checkpoints.append({
       'time': current_time,
-      'elapsed': current_time - profile['started']
+      'elapsed': current_time - profile.started_at
     })
 
     return self
