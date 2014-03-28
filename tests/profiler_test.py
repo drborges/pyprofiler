@@ -2,7 +2,7 @@ from nose.tools import raises
 from sure import expect
 from mock import Mock, patch
 
-from profiler import Profiler, InvalidProfileError
+from profiler import Profiler, Checkpoint, InvalidProfileError
 
 def create_profiler():
   datetime = Mock('datetime')
@@ -57,11 +57,13 @@ def test_should_not_stop_profiling_before_starting_it():
 def test_creates_checkpoints_for_profile(mocked_datetime):
   mocked_datetime.now = Mock(side_effect = [2, 10, 12, 15])
 
-  profiler = Profiler().start('id').checkpoint('id').checkpoint('id')
+  profiler = Profiler().start('id')
+  profiler.checkpoint('id')
+  profiler.checkpoint('id')
 
-  expect(profiler.profiles['id'].checkpoints).to.equal([
-    { 'time': 10, 'elapsed': 8 },
-    { 'time': 12, 'elapsed': 10 }
+  expect([c.__dict__ for c in profiler.profiles['id'].checkpoints]).to.equal([
+    Checkpoint(time=10, elapsed_time=8).__dict__,
+    Checkpoint(time=12, elapsed_time=10).__dict__
   ])
 
 @raises(InvalidProfileError)

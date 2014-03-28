@@ -45,16 +45,11 @@ class Profiler:
     if profile_id not in self.profiles:
       raise InvalidProfileError(profile_id)
 
-    current_time = datetime.now()
-
     profile = self.profiles[profile_id]
+    current_time = datetime.now()
+    elapsed_time = current_time - profile.started_at
 
-    profile.checkpoints.append({
-      'time': current_time,
-      'elapsed': current_time - profile.started_at
-    })
-
-    return self
+    profile.checkpoints.append(Checkpoint(current_time, elapsed_time))
 
 class InvalidProfileError(Exception):
   def __init__(self, profile_id):
