@@ -6,10 +6,9 @@ class Checkpoint(object):
     self.time = time
     self.elapsed_time = elapsed_time
 
-class Profile:
+class Profile(object):
 
-  def __init__(self, id, started_at = None, stopped_at = None, elapsed_time = None):
-    self._id = id
+  def __init__(self, started_at = None, stopped_at = None, elapsed_time = None):
     self.started_at = started_at
     self.stopped_at = stopped_at
     self.elapsed_time = elapsed_time

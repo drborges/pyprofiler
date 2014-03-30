@@ -1,6 +1,6 @@
-from nose.tools import raises
 from sure import expect
 from mock import Mock, patch
+from nose.tools import raises
 
 from profiler import Profiler, Checkpoint, InvalidProfileError
 
