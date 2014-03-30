@@ -3,9 +3,9 @@ from text_formatter import TextFormatter
 
 class Reporter:
 
-  def __init__(self, base_dir='./', formatter=TextFormatter()):
+  def __init__(self, base_dir='./', default_formatter=TextFormatter()):
     self.base_dir = base_dir
-    self.formatters = [formatter]
+    self.formatters = [default_formatter]
 
   def generate(self, profiles):
     for formatter in self.formatters:
