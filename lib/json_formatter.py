@@ -1,7 +1,6 @@
 import json
 
 from datetime import datetime, timedelta
-from profiler import Profile, Checkpoint
 
 class JsonFormatter:
   def format(self, profiles):
@@ -11,7 +10,7 @@ class JsonFormatter:
         datetime.hour, datetime.minute, datetime.second + microsecond_as_seconds)
 
     def to_json(o):
-      if isinstance(o, Profile) or isinstance(o, Checkpoint):
+      if hasattr(o, '__dict__'):
         return o.__dict__
       elif isinstance(o, datetime):
         return format_time(o)
